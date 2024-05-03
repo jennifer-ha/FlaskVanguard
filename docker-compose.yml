@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - PRODUCTION=false
+    image: myapp:test
+    container_name: myapp_test
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      PRODUCTION: False
+      GUNICORN_WORKERS: "1"
+      GUNICORN_WORKER_CLASS: gevent
+      GUNICORN_LOG_LEVEL: debug
+      GUNICORN_PRELOAD_APP: "True"
+      TEST_MODE: "True"
+    volumes:
+      - .:/app
+      - /app/node_modules

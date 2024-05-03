@@ -1,0 +1,12 @@
+**/__pycache__
+**/.pytest_cache
+**/.git
+**/.gitignore
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/Pipfile
+**/Pipfile.lock
+.dockerignore
+Dockerfile
+README.md

@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - PRODUCTION=true
+    image: myapp:production
+    container_name: myapp_production
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      PRODUCTION: True
+      GUNICORN_WORKERS: "4"
+      GUNICORN_WORKER_CLASS: gevent
+      GUNICORN_LOG_LEVEL: warning
+      TEST_MODE: "False"
+      REDIS_PASSWORD: "your_secure_password"
+      SECRET_KEY: "your_secret"
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  redis:
+    image: redis:alpine
+    container_name: redis_for_myapp
+    command: redis-server --requirepass your_secure_password
+    volumes:
+      - redis_data:/data
+    expose:
+      - "6379"
+
+volumes:
+  logs:
+    name: myapp_logs
+  redis_data:
+    name: redis_data_volume
+
+networks:
+  default:
+    name: myapp_network
