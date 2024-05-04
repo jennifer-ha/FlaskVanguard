@@ -50,28 +50,28 @@ Follow these steps to set up and run FlaskVanguard-Boilerplate on your local mac
 
 ### Docker Setup
 
-### Development / Testing Environment
+## Development / Testing Environment
 
 To run the application in a Docker container for development or testing, follow these steps:
 
- **Build and run the Docker environment**
+1. **Build and run the Docker environment**
    ```bash
    docker-compose up --build
-
-  ** Stopping Docker Containers**
+   
+2.  **Stopping Docker Containers**
 To stop and remove all containers, networks, and volumes created by Docker Compose, you can use the following command:
     ```bash
     docker-compose down
 
-### Production Environment
+## Production Environment
 
 For deploying the application in a production environment, use the production-specific Docker Compose file:
 
-Build and run the Docker environment for production
+1. **Build and run the Docker environment for production**
     ```bash
     docker-compose -f docker-compose.prod.yml up --build
 
-   **Stopping Docker Containers**
+2. **Stopping Docker Containers**
     ```bash
     docker-compose -f docker-compose.prod.yml down
 
