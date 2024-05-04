@@ -22,47 +22,45 @@ class RateLimiter:
     Methods:
         __init__(app: Flask, storage_uri: str = None): Initializes the rate limiter.
     """
-    from redis.exceptions import RedisError
-from flask_limiter.util import ConfigurationError
 
-def __init__(self, app, storage_uri=None):
-    """
-    Initialize the rate limiter for the given Flask application.
+    def __init__(self, app, storage_uri=None):
+        """
+        Initialize the rate limiter for the given Flask application.
 
-    This function initializes a Flask-Limiter instance with a custom key function and storage URI. 
-    The storage URI is retrieved from the application's configuration using the 'STORAGE_URL' key. 
-    If the storage URI starts with "redis://", it attempts to connect to Redis and logs a message if successful.
+        This function initializes a Flask-Limiter instance with a custom key function and storage URI. 
+        The storage URI is retrieved from the application's configuration using the 'STORAGE_URL' key. 
+        If the storage URI starts with "redis://", it attempts to connect to Redis and logs a message if successful.
 
-    Args:
-        app (Flask): The Flask application instance.
-        storage_uri (str, optional): The storage URI for the Flask-Limiter instance. Defaults to None.
+        Args:
+            app (Flask): The Flask application instance.
+            storage_uri (str, optional): The storage URI for the Flask-Limiter instance. Defaults to None.
 
-    Raises:
-        RedisError: If an error occurs while connecting to Redis.
-        ConfigurationError: If an error occurs while initializing the Flask-Limiter instance.
-    """
-    app.logger.debug("Initializing the limiter...")
-    storage_uri = app.config.get('STORAGE_URL', 'memory://')
+        Raises:
+            RedisError: If an error occurs while connecting to Redis.
+            ConfigurationError: If an error occurs while initializing the Flask-Limiter instance.
+        """
+        app.logger.debug("Initializing the limiter...")
+        storage_uri = app.config.get('STORAGE_URL', 'memory://')
 
-    try:
-        self._limiter = Limiter(
-            key_func=limit_key,
-            app=app,
-            default_limits=["10 per minute"],
-            storage_uri=storage_uri
-        )
-    except ConfigurationError as e:
-        app.logger.error(f"Error initializing the limiter: {e}")
-        raise
-
-    if storage_uri.startswith("redis://"):
         try:
-            r = redis.Redis.from_url(storage_uri)
-            r.ping()
-            app.logger.debug("Successfully connected to Redis")
-        except RedisError as e:
-            app.logger.error(f"Error connecting to Redis: {e}")
+            self._limiter = Limiter(
+                key_func=limit_key,
+                app=app,
+                default_limits=["10 per minute"],
+                storage_uri=storage_uri
+            )
+        except ValueError as e:
+            app.logger.error(f"Error initializing the limiter: {e}")
             raise
+
+        if storage_uri.startswith("redis://"):
+            try:
+                r = redis.Redis.from_url(storage_uri)
+                r.ping()
+                app.logger.debug("Successfully connected to Redis")
+            except Exception as e:
+                app.logger.error(f"Error connecting to Redis: {e}")
+                raise
 
 def init_extensions(app):
     """
