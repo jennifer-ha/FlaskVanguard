@@ -18,6 +18,7 @@ services:
       GUNICORN_LOG_LEVEL: debug
       GUNICORN_PRELOAD_APP: "True"
       TEST_MODE: "True"
+      SECRET_KEY: "your_secret"
     volumes:
       - .:/app
       - /app/node_modules
