@@ -77,7 +77,7 @@ For deploying the application in a production environment, use the production-sp
 
 ### Testing
 
-run test in the test folder
+run test in the test folder:
     ```bash
     cd tests
     pytest
