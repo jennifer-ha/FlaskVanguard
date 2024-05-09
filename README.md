@@ -76,9 +76,6 @@ For deploying the application in a production environment, use the production-sp
     docker-compose -f docker-compose.prod.yml down
 
 ### Testing
-
-run test in the test folder:
-    ```bash
     cd tests
     pytest
 
